@@ -14,10 +14,11 @@
 
 
   <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js'></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
 
-    <link rel="stylesheet" href="styles.css">
-
+    <link rel="stylesheet" href="./styles.css">
+`
     <style>
         body {
         margin: 0;
@@ -144,6 +145,40 @@
         // initialize the map canvas to interact with later
         var canvas = map.getCanvasContainer();
 
+        // TODO: ADD BACK LATER!!
+        // map.on('load', function() {
+        // // the rest of the code will go in here
+        //     var layers = ['0-10', '10-20', '20-50', '50-100', '100-200', '200-500', '500-1000', '1000+'];
+        //     var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
+        
+        //     for (i = 0; i < layers.length; i++) {
+        //         var layer = layers[i];
+        //         var color = colors[i];
+        //         var item = document.createElement('div');
+        //         var key = document.createElement('span');
+        //         key.className = 'legend-key';
+        //         key.style.backgroundColor = color;
+
+        //         var value = document.createElement('span');
+        //         value.innerHTML = layer;
+        //         item.appendChild(key);
+        //         item.appendChild(value);
+        //         legend.appendChild(item);
+        //     }
+        // });
+
+        // map.on('mousemove', function(e) {
+        //     var countries = map.queryRenderedFeatures(e.point, {
+        //         layers: ['countries']
+        //     });
+
+        //     if (countries.length > 0) {
+        //         document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> people per square mile</em></p>';
+        //     } else {
+        //         document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
+        //     }
+        // });
+
         map.on('mousemove', function(e) {
             var countries = map.queryRenderedFeatures(e.point, {
                 layers: ['countries']
@@ -155,6 +190,7 @@
                 document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
             }
         });
+
 
         map.getCanvas().style.cursor = 'default';
 
@@ -217,6 +253,18 @@
                 }
                 initLayers();
             })
+
+            map.on('mousemove', function(e) {
+            var countries = map.queryRenderedFeatures(e.point, {
+                layers: ['countries']
+            });
+
+            if (countries.length > 0) {
+                document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> people per square mile</em></p>';
+            } else {
+                document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
+            }
+        });
 
             const initLayers = () => {
 
