@@ -1,0 +1,28 @@
+var app = require('express')();
+var express = require('express');
+var http = require('http').Server(app);
+var MongoClient = require('mongodb').MongoClient
+
+var collection;
+
+MongoClient.connect("mongodb://localhost:27017/", function(err, database) {
+
+  if(err) { return console.dir(err); }
+
+  const myAwesomeDB = database.db('telemetry')
+  collection = myAwesomeDB.collection('snapshots')
+
+});
+
+app.use("/public", express.static(__dirname + "/public")); (all things are in this folder in /public)
+
+app.get('/', function(req, res){
+    res.sendFile(__dirname + '/index.html');
+});
+
+http.listen(3000, '0.0.0.0', function(){
+    console.log('listening on *:3000');
+});
+    
+output = {};
+collection.insert(output, function (err, result) {});
