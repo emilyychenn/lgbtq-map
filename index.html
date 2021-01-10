@@ -8,6 +8,7 @@
   <meta name="description" content="nwHacks Jan 2021">
   <meta name="author" content="code-monkeys">
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <link rel="shortcut icon" href="images/icon.png">
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
 
@@ -33,6 +34,10 @@
         font-size: 1em;
         }
 
+        h2 {
+            color: white;
+        }
+
         p {
         font-size: 0.85em;
         margin: 10px;
@@ -44,7 +49,7 @@
         * on the page */
         #map {
         position: absolute;
-        top: 0;
+        top: 75px;
         bottom: 0;
         width: 100%;
         }
@@ -64,10 +69,19 @@
         border-radius: 3px;
         }
 
-        #features {
+        #header {
         top: 0;
+        height: 75px;
+        left: 0;
+        right: 0;
+        background-color: #003366;
+        margin-right: 0;
+        }
+
+        #features {
+        top: 100px;
         height: 100px;
-        margin-top: 20px;
+        margin-top: 5px;
         width: 250px;
         }
 
@@ -91,11 +105,13 @@
 </head>
 
 <body>
-    <div id='map'>
-        
+    <div id='map'></div>
+
+    <div class='map-overlay' id='header'>
+        <h2 style='word-spacing: 50px; text-align: right; padding-right: 40px; padding-top: 15px;'>map rankings</h2>
     </div>
 
-    <div class='map-overlay' id='features'><h2>US population density</h2><div id='pd'><p>Hover over a state!</p></div></div>
+    <div class='map-overlay' id='features'><h3>LGBTQ-Friendly Countries</h3><div id='pd'><p>Hover over a country!</p></div></div>
     <div class='map-overlay' id='legend'></div>
 
     <script>
@@ -103,14 +119,67 @@
    
         var map = new mapboxgl.Map({
             container: 'map', // container id
-            style: 'mapbox://styles/emilyychenn/ckjqblutc0vn119ppbzewov42' // replace this with your style URL
+            style: 'mapbox://styles/emilyychenn/ckjqf9ey34q2v19qivxumvyuq' // replace this with your style URL
         });
 
         // initialize the map canvas to interact with later
         var canvas = map.getCanvasContainer();
 
+        // TODO: ADD BACK LATER!!
+        // map.on('load', function() {
+        // // the rest of the code will go in here
+        //     var layers = ['0-10', '10-20', '20-50', '50-100', '100-200', '200-500', '500-1000', '1000+'];
+        //     var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
+        
+        //     for (i = 0; i < layers.length; i++) {
+        //         var layer = layers[i];
+        //         var color = colors[i];
+        //         var item = document.createElement('div');
+        //         var key = document.createElement('span');
+        //         key.className = 'legend-key';
+        //         key.style.backgroundColor = color;
+
+        //         var value = document.createElement('span');
+        //         value.innerHTML = layer;
+        //         item.appendChild(key);
+        //         item.appendChild(value);
+        //         legend.appendChild(item);
+        //     }
+        // });
+
+        map.on('mousemove', function(e) {
+            var countries = map.queryRenderedFeatures(e.point, {
+                layers: ['countries']
+            });
+
+            if (countries.length > 0) {
+                document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> people per square mile</em></p>';
+            } else {
+                document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
+            }
+        });
+
+        map.getCanvas().style.cursor = 'default';
+
+        /* new code, based on JSFiddle */
+        let newdata = new Map();
+
+        const getJSON = (url, callback) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'json';
+            xhr.onload = () => {
+                const status = xhr.status;
+                if (status === 200) {
+                    callback(null, xhr.response);
+                } else {
+                    callback(status, xhr.response);
+                }
+            }; 
+            xhr.send()
+        };
+
         map.on('load', function() {
-        // the rest of the code will go in here
             var layers = ['0-10', '10-20', '20-50', '50-100', '100-200', '200-500', '500-1000', '1000+'];
             var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
         
@@ -128,21 +197,92 @@
                 item.appendChild(value);
                 legend.appendChild(item);
             }
-        });
 
-        map.on('mousemove', function(e) {
-            var states = map.queryRenderedFeatures(e.point, {
-                layers: ['statedata']
+
+            getJSON('/incoming', (err, data) => {
+                if (err !== null) {
+                    console.log('error fetching file');
+                } else {
+                    console.log("incoming.json successfully fetched");
+                    data.forEach((row) => {
+                    if (!row['name']) {
+                        return;
+                    }
+                    // get score
+                    const score = row['score'];
+                    const id = row['name'];
+                    newdata[id] = {
+                    score: score,
+                    // diff: row['per_point_diff'] * 100
+                    }
+                })
+
+                }
+                initLayers();
+            })
+
+            const initLayers = () => {
+
+                const blueScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range(['#bad2f0', '#1868d1']);
+
+                const redScale = d3.scaleLinear()
+                .domain([0, 100])
+                .range(['#f2cbcb', '#be2d1e']);
+
+                const scale = d3.scaleLinear()
+                .domain([0,100])
+                .range(['#be2d1e', '#1868d1']);
+
+
+                map.addSource('countries', {
+                'type': 'vector',
+                'url': 'mapbox://styles/emilyychenn/ckjqf9ey34q2v19qivxumvyuq'
+                });
+
+                map.addLayer({
+                'id': 'countries-join',
+                'type': 'fill',
+                'source': 'countries',
+                'source-layer': 'countriesnew',
+                'paint': {
+                    'fill-color': ['feature-state', 'color']
+                }
+                }, 'waterway-label');
+
+
+                const setCountriesColor = () => {
+                for (let key in newdata) {
+                    map.setFeatureState({
+                    source: 'countries',
+                    sourceLayer: 'countriesnew',
+                    id: key
+                    }, {
+                        'color': newdata[key]['score'] === scale(newdata[key]['diff'])
+                    // 'color': newdata[key]['score'] === 'dem' ? blueScale(newdata[key]['diff']) : redScale(newdata[key]['diff'])
+                    })
+                }
+                }
+
+
+                const setAfterLoad = (e) => {
+                if (e.sourceId === 'countries' && e.isSourceLoaded) {
+                    setCountriesColor();
+                    map.off('sourcedata', setAfterLoad)
+                }
+                }
+
+                if (map.isSourceLoaded('countries')) {
+                setCountriesColor();
+                } else {
+                map.on('sourcedata', setAfterLoad);
+                }
+            }
             });
 
-            if (states.length > 0) {
-                document.getElementById('pd').innerHTML = '<h3><strong>' + states[0].properties.name + '</strong></h3><p><strong><em>' + states[0].properties.density + '</strong> people per square mile</em></p>';
-            } else {
-                document.getElementById('pd').innerHTML = '<p>Hover over a state!</p>';
-            }
-        });
 
-        map.getCanvas().style.cursor = 'default';
+
 
         
     </script>
