@@ -81,9 +81,9 @@
 
         #features {
         top: 130px;
-        height: 130px;
+        height: 150px;
         margin-top: 5px;
-        width: 250px;
+        width: 275px;
         }
 
         #legend {
@@ -154,21 +154,21 @@
             });
 
             if (countries.length > 0) {
-                document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>';
+                document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + Math.round(countries[0].properties.score * 100 + Number.EPSILON)/100 + '</strong> LGBTQ friendliness score</em></p>';
                 if (countries[0].properties.score < -0.7) {
-                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>VERY unsafe! Do not visit.</p>';
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + Math.round(countries[0].properties.score * 100 + Number.EPSILON)/100 + '</strong> LGBTQ friendliness score</em></p>' + '<p>VERY unsafe! Do not visit.</p>';
                 } else if (countries[0].properties.score < -0.4) {
-                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Not safe! Try and avoid</p>';
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + Math.round(countries[0].properties.score * 100 + Number.EPSILON)/100 + '</strong> LGBTQ friendliness score</em></p>' + '<p>Not safe! Try and avoid</p>';
                 } else if (countries[0].properties.score < -0.1) {
-                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Not recommended! Proceed with caution.</p>';
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + Math.round(countries[0].properties.score * 100 + Number.EPSILON)/100 + '</strong> LGBTQ friendliness score</em></p>' + '<p>Not recommended! Proceed with caution.</p>';
                 } else if (countries[0].properties.score < 0.2) {
-                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Mostly neutral. Take care!</p>';
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + Math.round(countries[0].properties.score * 100 + Number.EPSILON)/100 + '</strong> LGBTQ friendliness score</em></p>' + '<p>Mostly neutral. Take care!</p>';
                 } else if (countries[0].properties.score < 0.5) {
-                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Not bad, safe travels!.</p>';
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + Math.round(countries[0].properties.score * 100 + Number.EPSILON)/100 + '</strong> LGBTQ friendliness score</em></p>' + '<p>Not bad, safe travels!.</p>';
                 } else if (countries[0].properties.score < 0.8) {
-                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Safe to visit.</p>';
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + Math.round(countries[0].properties.score * 100 + Number.EPSILON)/100 + '</strong> LGBTQ friendliness score</em></p>' + '<p>Safe to visit.</p>';
                 } else {
-                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Good option, have a great trip!</p>';
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + Math.round(countries[0].properties.score * 100 + Number.EPSILON)/100 + '</strong> LGBTQ friendliness score</em></p>' + '<p>Good option, have a great trip!</p>';
                 }
             } else {
                 document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
@@ -196,9 +196,14 @@
             xhr.send()
         };
 
+        function sourceRefresh(e) {
+            var data = draw.getAll();
+            map.getSource('countries').setData(data);
+        };
+
         map.on('load', function() {
             var layers = ['-1.0 to -0.7', '-0.7 to -0.4', '-0.4 to -0.1', '-0.1 to 0.2', '0.2 to 0.5', '0.5 to 0.8', '0.8 to 1.0'];
-            var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026'];
+            var colors = ['#ff0000', '#ff5a00', '#ff9a00', '#f0f5a8', '#ddf969', '#a9f36a', '#3cb94d'];
         
             for (i = 0; i < layers.length; i++) {
                 var layer = layers[i];
