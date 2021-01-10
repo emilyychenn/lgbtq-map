@@ -11,9 +11,6 @@ async function createListing(client, newListing){
     console.log(`New listing created with the following id: ${result.insertedId}`);
 }
 
-async function createCountry(client, newCountry){
-    const result = await client.db("JSON_Objects").collection("nwHack").insertOne(newCountry);
-}
 
 async function createMultipleListings(client, newListings){
     const result = await client.db("sample_airbnb").collection("listingsAndReviews").insertMany(newListings);
@@ -92,8 +89,15 @@ async function updateListingByName(client, nameOfListing, updatedListing) {
  */
 
 async function updateCountryScorebyName(client, currentCountry, updatedData) {
-    result = await client.db("JSON_Objects").collection("nwHack").updateOne({ name: currentCountry }, { $set: updatedData });
+    result = await client.db("JSON_Objects").collection("nwHack").updateOne({ country: currentCountry }, { $set: updatedData });
 }
+
+/**
+ * Make the country
+ * 
+ * @param {*} client given country
+ * @param {*} newCountry new country object being put to the database
+ */
 
 async function createCountry(client, newCountry){
     const result = await client.db("JSON_Objects").collection("nwHack").insertOne(newCountry);
@@ -111,7 +115,7 @@ async function createCountry(client, newCountry){
 
 async function findCountryScorebyName(client, nameOfCountry) {
     result = await client.db("JSON_Object").collection("nwHack")
-                        .findOne({ name: nameOfCountry });
+                        .findOne({ country: nameOfCountry });
 
     if (result) {
      //   console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
@@ -127,13 +131,15 @@ async function findCountryScorebyName(client, nameOfCountry) {
  * 
  * this function deletes the country by its name
  * 
+ * THIS FCNT IS NOT WORKING, IDK Y
+ * 
+ * 
  * @param {*} client the current client working with MongoDB
  * @param {*} nameOfCountry the name of country that is deleted
  */
 
 async function deleteCountryByName(client, nameOfCountry) {
-    result = await client.db("JSON_Objects").collection("nwHacks")
-            .deleteOne({ name: nameOfCountry });
+    result = await client.db("JSON_Objects").collection("nwHack").deleteOne({ name: nameOfCountry });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
 }
 
