@@ -26,13 +26,15 @@ async function findOneListingByName(client, nameOfListing) {
     result = await client.db("sample_airbnb").collection("listingsAndReviews")
                         .findOne({ name: nameOfListing });
 
-   // const result = await cursor.toArray();
+ 
 
     if (result) {
         console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
-        console.log(`${result.bedrooms} is number of bedrooms`);
+        console.log(`${result.bedrooms} is number of bedrooms in the function`);
+        return result.bedrooms;
     } else {
         console.log(`No listings found with the name '${nameOfListing}'`);
+        return nameOfListing;
     }
 }
 
@@ -95,9 +97,16 @@ async function findScorebyName(client, nameOfCountry) {
     if (result) {
      //   console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
         console.log(`${result.score} is the score.`);
+     //   return result.score;
     } else {
         console.log(`No listings found with the name '${nameOfListing}'`);
     }
 }
 
-module.exports = {listDatabases,createListing,createMultipleListings,findOneListingByName,findMinListings,updateListingByName,createCountry,updateCountryScorebyName,findScorebyName};
+async function deleteCountryByName(client, nameOfCountry) {
+    result = await client.db("JSON_Objects").collection("nwHacks")
+            .deleteOne({ name: nameOfCountry });
+    console.log(`${result.deletedCount} document(s) was/were deleted.`);
+}
+
+module.exports = {createCountry,updateCountryScorebyName,findScorebyName,deleteCountryByName};

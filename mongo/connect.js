@@ -28,7 +28,8 @@ run().catch(console.dir);
 
 async function mainFcns (){
    // await extMain.listDatabases(client);
-    await extMain.findOneListingByName(client,"Ribeira Charming Duplex");
+    var test = await extMain.findOneListingByName(client,"Ribeira Charming Duplex");
+    console.log(`${test} is number of bedrooms in the main part BEECH`);
 
 
 
