@@ -89,7 +89,7 @@ async function updateListingByName(client, nameOfListing, updatedListing) {
  */
 
 async function updateCountryScorebyName(client, currentCountry, updatedData) {
-    result = await client.db("JSON_Objects").collection("nwHack").updateOne({ country: currentCountry }, { $set: updatedData });
+    result = await client.db("JSON_Objects").collection("JSON_Countries").updateOne({ country: currentCountry }, { $set: updatedData });
 }
 
 /**
@@ -100,7 +100,7 @@ async function updateCountryScorebyName(client, currentCountry, updatedData) {
  */
 
 async function createCountry(client, newCountry){
-    const result = await client.db("JSON_Objects").collection("nwHack").insertOne(newCountry);
+    const result = await client.db("JSON_Objects").collection("JSON_Countries").insertOne(newCountry);
 }
 
 /**
@@ -114,7 +114,7 @@ async function createCountry(client, newCountry){
  */
 
 async function findCountryScorebyName(client, nameOfCountry) {
-    result = await client.db("JSON_Object").collection("nwHack")
+    result = await client.db("JSON_Object").collection("JSON_Countries")
                         .findOne({ country: nameOfCountry });
 
     if (result) {
@@ -139,8 +139,82 @@ async function findCountryScorebyName(client, nameOfCountry) {
  */
 
 async function deleteCountryByName(client, nameOfCountry) {
-    result = await client.db("JSON_Objects").collection("nwHack").deleteOne({ name: nameOfCountry });
+    result = await client.db("JSON_Objects").collection("JSON_Countries").deleteOne({ name: nameOfCountry });
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
 }
 
-module.exports = {createCountry,updateCountryScorebyName,findCountryScorebyName,deleteCountryByName};
+
+async function findCountryByName(client, nameOfCountry) {
+    result = await client.db("JSON_Objects").collection("JSON_Countries")
+                        .findOne({ name: nameOfCountry });
+
+    if (result) {
+        return result;
+    } else {
+        console.log(`error in finding objects `);
+    }
+}
+
+async function makeLargeArray(client,nameArray){
+    var myArray = new Array();
+
+    for (i= 0; i < nameArray.length;i++){
+        myArray[i]= await findCountryByName(client,nameArray[i]);
+    }
+
+    return myArray;
+
+}
+
+
+var NameArray = [
+    '','Australia','Canada','Malta','Sweden','Austria','United Kingdom','Argentina','Netherlands','Spain',
+    'Uruguay','Denmark','Germany','Iceland','New Zealand','Portugal','Belgium','Colombia','Switzerland','Finland',
+    'Luxembourg','Norway','Réunion','France','Gibraltar','Greenland','Ireland',
+    'Israel','Puerto Rico','South Africa','Taiwan','French Polynesia','New Caledonia','United States',
+    'Andorra','Guadeloupe','Martinique','Slovenia','Czech Republic','Estonia','Guam','Chile',
+    'Ecuador','Italy','Liechtenstein','Nepal','Slovakia','Thailand','India',
+    'Bermuda','Bolivia','Brazil','Croatia','Hungary','Mexico',
+    'Mozambique','Bosnia and Herzegovina','Botswana','Costa Rica','Cuba','Cyprus',
+    'Greece','South Korea','Macau','Seychelles','US Virgin Islands',
+    'Angola','Cambodia','incl.  Hong Kong','El Salvador','Fiji','Japan',
+    'Lesotho','Lithuania','Mongolia','Panama', 'San Marino','Serbia','Albania','Aruba', 
+    'Benin','Bulgaria','Curaçao','Kosovo','Laos',
+    'Latvia','Mali','Monaco','Montenegro','Romania','Sint Maarten','Turkey','Armenia',
+    'Vietnam','British Virgin Island','Cabo Verde','Guinea-Bissau','Kazakhstan','North Macedonia','Moldova','Nicaragua','Niger',
+    'Philippines','Singapore','Gabon','Belize','Georgia','Honduras','Kyrgyzstan','Peru',
+    'Poland', 'Ukraine', 'Burkina Faso','Myanmar','Sri Lanka', 'Vanuatu', 'Venezuela',
+    'Bhutan','Democratic Republic of the Congo','Indonesia','Kenya', 'Lebanon','Mauritius','Namibia','Pakistan','Republic of the Congo',
+    'Rwanda','Samoa','Suriname', 'Syria','Tajikistan', 'Algeria','Antigua and Barbuda','Azerbaijan','Bahamas','Bahrain',
+    'Bangladesh','Barbados','Djibouti','Equatorial Guinea','Guatemala','Jordan','North Korea', 'Madagascar', 'Trinidad and Tobago',
+    'Tunisia','Vatican City','Belarus','Burundi', 'Dominican Republic','Grenada', 'Guyana','Ivory Coast','Oman',
+     'Paraguay','Sierra Leone','Central African Republic','Ghana','Liberia', 'Togo', 'Tonga','Brunei','Chad',
+     'Comoros','Cook Islands','Dominica','Ethiopia','Gambia','Haiti','Iraq','Jamaica','Maldives',
+     'Mauritania',
+     'Morocco', 
+     'Papua New Guinea',
+     'Russia',
+     'Senegal',
+     'Solomon Islands',
+     'Eswatini',
+     'Uzbekistan',
+     'Zambia',
+     'Egypt',
+    'Eritrea', 
+     'Indonesia',
+     'Kuwait','Sudan','Tanzania', 'Turkmenistan',
+     'Uganda',
+     'Zimbabwe',
+     'Cameroon', 'Malawi',
+     'Malaysia',
+     'Nigeria',
+    'Qatar',
+     'Afghanistan',
+    'Libya',
+     'United Arab Emirates',
+     'Yemen',
+     'Iran', 'Saudi Arabia','Somalia', 'Russia',
+]
+
+
+module.exports = {createCountry,updateCountryScorebyName,findCountryScorebyName,deleteCountryByName,getCollection,findCountryByName, makeLargeArray};

@@ -18,11 +18,11 @@ async function run() {
         await mainFcns();
     } catch (err) {
         console.log(err.stack);
-    }
+    }/*
     finally {
        await client.close();
        console.log("Disconnected");
-    }
+    }*/
 }
 run().catch(console.dir);
 
@@ -35,11 +35,14 @@ async function mainFcns (){
   //  await extMain.deleteCountryByName(client,'Canada');
     //var test = await extMain.findOneListingByName(client,"Ribeira Charming Duplex");
   //  console.log(`${test} is number of bedrooms in the main part BEECH`);
-
+/** 
         for ( i = 0; i < BigArray.length; i++){
         var tempCountry = BigArray[i];
           await extMain.createCountry(client,tempCountry);
-       }
+       }*/
+
+     //  const collection = client.db("JSON_Objects").collections("nwHacks");
+     //  console.log(`${collection} document(s) was/were deleted.`);
 
   //  await extMain.updateListingByName(client, "Infinite Views", { score: 0.1});
 
@@ -253,4 +256,52 @@ var BigArray = [
     { country: 'Somalia', score: -0.9411764705882353 },
     { country: 'Russia', score: -1 }
     ]
-    
+
+    var NameArray = [
+        '','Australia','Canada','Malta','Sweden','Austria','United Kingdom','Argentina','Netherlands','Spain',
+        'Uruguay','Denmark','Germany','Iceland','New Zealand','Portugal','Belgium','Colombia','Switzerland','Finland',
+        'Luxembourg','Norway','Réunion','France','Gibraltar','Greenland','Ireland',
+        'Israel','Puerto Rico','South Africa','Taiwan','French Polynesia','New Caledonia','United States',
+        'Andorra','Guadeloupe','Martinique','Slovenia','Czech Republic','Estonia','Guam','Chile',
+        'Ecuador','Italy','Liechtenstein','Nepal','Slovakia','Thailand','India',
+        'Bermuda','Bolivia','Brazil','Croatia','Hungary','Mexico',
+        'Mozambique','Bosnia and Herzegovina','Botswana','Costa Rica','Cuba','Cyprus',
+        'Greece','South Korea','Macau','Seychelles','US Virgin Islands',
+        'Angola','Cambodia','incl.  Hong Kong','El Salvador','Fiji','Japan',
+        'Lesotho','Lithuania','Mongolia','Panama', 'San Marino','Serbia','Albania','Aruba', 
+        'Benin','Bulgaria','Curaçao','Kosovo','Laos',
+        'Latvia','Mali','Monaco','Montenegro','Romania','Sint Maarten','Turkey','Armenia',
+        'Vietnam','British Virgin Island','Cabo Verde','Guinea-Bissau','Kazakhstan','North Macedonia','Moldova','Nicaragua','Niger',
+        'Philippines','Singapore','Gabon','Belize','Georgia','Honduras','Kyrgyzstan','Peru',
+        'Poland', 'Ukraine', 'Burkina Faso','Myanmar','Sri Lanka', 'Vanuatu', 'Venezuela',
+        'Bhutan','Democratic Republic of the Congo','Indonesia','Kenya', 'Lebanon','Mauritius','Namibia','Pakistan','Republic of the Congo',
+        'Rwanda','Samoa','Suriname', 'Syria','Tajikistan', 'Algeria','Antigua and Barbuda','Azerbaijan','Bahamas','Bahrain',
+        'Bangladesh','Barbados','Djibouti','Equatorial Guinea','Guatemala','Jordan','North Korea', 'Madagascar', 'Trinidad and Tobago',
+        'Tunisia','Vatican City','Belarus','Burundi', 'Dominican Republic','Grenada', 'Guyana','Ivory Coast','Oman',
+         'Paraguay','Sierra Leone','Central African Republic','Ghana','Liberia', 'Togo', 'Tonga','Brunei','Chad',
+         'Comoros','Cook Islands','Dominica','Ethiopia','Gambia','Haiti','Iraq','Jamaica','Maldives',
+         'Mauritania',
+         'Morocco', 
+         'Papua New Guinea',
+         'Russia',
+         'Senegal',
+         'Solomon Islands',
+         'Eswatini',
+         'Uzbekistan',
+         'Zambia',
+         'Egypt',
+        'Eritrea', 
+         'Indonesia',
+         'Kuwait','Sudan','Tanzania', 'Turkmenistan',
+         'Uganda',
+         'Zimbabwe',
+         'Cameroon', 'Malawi',
+         'Malaysia',
+         'Nigeria',
+        'Qatar',
+         'Afghanistan',
+        'Libya',
+         'United Arab Emirates',
+         'Yemen',
+         'Iran', 'Saudi Arabia','Somalia', 'Russia',
+    ]
