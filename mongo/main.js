@@ -82,6 +82,15 @@ async function updateListingByName(client, nameOfListing, updatedListing) {
 
 // Actual data monkey time
 
+/**
+ * 
+ * updates country score via its name
+ * 
+ * @param {*} client current client working in 
+ * @param {*} currentCountry current country being updated
+ * @param {*} updatedData what you want to change, am assuming it is the score (IS NOT BUILt To TOCUH THE GEO FILE)
+ */
+
 async function updateCountryScorebyName(client, currentCountry, updatedData) {
     result = await client.db("JSON_Objects").collection("nwHack").updateOne({ name: currentCountry }, { $set: updatedData });
 }
@@ -90,7 +99,17 @@ async function createCountry(client, newCountry){
     const result = await client.db("JSON_Objects").collection("nwHack").insertOne(newCountry);
 }
 
-async function findScorebyName(client, nameOfCountry) {
+/**
+ * 
+ * Finds the score of the given country, 
+ * 
+ * CURRENTLY JUST PRINTS AND DOES NOT RETURN, UN-COMMENT THE RETURN STATEMENTS TO CHANGES THIS
+ * 
+ * @param {*} client the current client working with MongoDB
+ * @param {*} nameOfCountry the name of country that is deleted
+ */
+
+async function findCountryScorebyName(client, nameOfCountry) {
     result = await client.db("JSON_Object").collection("nwHack")
                         .findOne({ name: nameOfCountry });
 
@@ -100,8 +119,17 @@ async function findScorebyName(client, nameOfCountry) {
      //   return result.score;
     } else {
         console.log(`No listings found with the name '${nameOfListing}'`);
+        //return nameOfCountry;
     }
 }
+
+/**
+ * 
+ * this function deletes the country by its name
+ * 
+ * @param {*} client the current client working with MongoDB
+ * @param {*} nameOfCountry the name of country that is deleted
+ */
 
 async function deleteCountryByName(client, nameOfCountry) {
     result = await client.db("JSON_Objects").collection("nwHacks")
@@ -109,4 +137,4 @@ async function deleteCountryByName(client, nameOfCountry) {
     console.log(`${result.deletedCount} document(s) was/were deleted.`);
 }
 
-module.exports = {createCountry,updateCountryScorebyName,findScorebyName,deleteCountryByName};
+module.exports = {createCountry,updateCountryScorebyName,findCountryScorebyName,deleteCountryByName};
