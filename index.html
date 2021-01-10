@@ -183,10 +183,11 @@
             }
 
 
-            getJSON('data/incoming.json', (err, data) => {
+            getJSON('/incoming', (err, data) => {
                 if (err !== null) {
                     console.log('error fetching file');
                 } else {
+                    console.log("incoming.json successfully fetched");
                     data.forEach((row) => {
                     if (!row['name']) {
                         return;
