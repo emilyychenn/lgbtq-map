@@ -63,7 +63,7 @@
         bottom: 0;
         right: 0;
         background: rgba(255, 255, 255, 0.8);
-        margin-right: 20px;
+        margin-right: 10px;
         font-family: Arial, sans-serif;
         overflow: auto;
         border-radius: 3px;
@@ -79,7 +79,7 @@
         }
 
         #features {
-        top: 100px;
+        top: 130px;
         height: 100px;
         margin-top: 5px;
         width: 250px;
@@ -105,13 +105,23 @@
 </head>
 
 <body>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+    <link
+        rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css"
+        type="text/css"
+    />
+    <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
     <div id='map'></div>
 
     <div class='map-overlay' id='header'>
         <h2 style='word-spacing: 50px; text-align: right; padding-right: 40px; padding-top: 15px;'>map rankings</h2>
     </div>
 
-    <div class='map-overlay' id='features'><h3>LGBTQ-Friendly Countries</h3><div id='pd'><p>Hover over a country!</p></div></div>
+    <div class='map-overlay' id='features'><h3>LGBTQ Friendly Countries</h3><div id='pd'><p>Hover over a country!</p></div></div>
     <div class='map-overlay' id='legend'></div>
 
     <script>
@@ -119,33 +129,20 @@
    
         var map = new mapboxgl.Map({
             container: 'map', // container id
-            style: 'mapbox://styles/emilyychenn/ckjqf9ey34q2v19qivxumvyuq' // replace this with your style URL
+            style: 'mapbox://styles/emilyychenn/ckjqf9ey34q2v19qivxumvyuq', // replace this with your style URL
+            center: [-79.4512, 43.6568],
+            zoom: 2
         });
+
+        map.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl
+            })
+        );
 
         // initialize the map canvas to interact with later
         var canvas = map.getCanvasContainer();
-
-        // TODO: ADD BACK LATER!!
-        // map.on('load', function() {
-        // // the rest of the code will go in here
-        //     var layers = ['0-10', '10-20', '20-50', '50-100', '100-200', '200-500', '500-1000', '1000+'];
-        //     var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
-        
-        //     for (i = 0; i < layers.length; i++) {
-        //         var layer = layers[i];
-        //         var color = colors[i];
-        //         var item = document.createElement('div');
-        //         var key = document.createElement('span');
-        //         key.className = 'legend-key';
-        //         key.style.backgroundColor = color;
-
-        //         var value = document.createElement('span');
-        //         value.innerHTML = layer;
-        //         item.appendChild(key);
-        //         item.appendChild(value);
-        //         legend.appendChild(item);
-        //     }
-        // });
 
         map.on('mousemove', function(e) {
             var countries = map.queryRenderedFeatures(e.point, {
@@ -153,13 +150,14 @@
             });
 
             if (countries.length > 0) {
-                document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> people per square mile</em></p>';
+                document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>';
             } else {
                 document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
             }
         });
 
         map.getCanvas().style.cursor = 'default';
+
 
         /* new code, based on JSFiddle */
         let newdata = new Map();
@@ -213,7 +211,6 @@
                     const id = row['name'];
                     newdata[id] = {
                     score: score,
-                    // diff: row['per_point_diff'] * 100
                     }
                 })
 
@@ -222,14 +219,6 @@
             })
 
             const initLayers = () => {
-
-                const blueScale = d3.scaleLinear()
-                .domain([0, 100])
-                .range(['#bad2f0', '#1868d1']);
-
-                const redScale = d3.scaleLinear()
-                .domain([0, 100])
-                .range(['#f2cbcb', '#be2d1e']);
 
                 const scale = d3.scaleLinear()
                 .domain([0,100])
@@ -260,7 +249,6 @@
                     id: key
                     }, {
                         'color': newdata[key]['score'] === scale(newdata[key]['diff'])
-                    // 'color': newdata[key]['score'] === 'dem' ? blueScale(newdata[key]['diff']) : redScale(newdata[key]['diff'])
                     })
                 }
                 }
@@ -280,9 +268,6 @@
                 }
             }
             });
-
-
-
 
         
     </script>
