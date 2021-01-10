@@ -14,10 +14,11 @@
 
 
   <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js'></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
 
-    <link rel="stylesheet" href="styles.css">
-
+    <link rel="stylesheet" href="./styles.css">
+`
     <style>
         body {
         margin: 0;
@@ -147,17 +148,17 @@
         //     }
         // });
 
-        map.on('mousemove', function(e) {
-            var countries = map.queryRenderedFeatures(e.point, {
-                layers: ['countries']
-            });
+        // map.on('mousemove', function(e) {
+        //     var countries = map.queryRenderedFeatures(e.point, {
+        //         layers: ['countries']
+        //     });
 
-            if (countries.length > 0) {
-                document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> people per square mile</em></p>';
-            } else {
-                document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
-            }
-        });
+        //     if (countries.length > 0) {
+        //         document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> people per square mile</em></p>';
+        //     } else {
+        //         document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
+        //     }
+        // });
 
         map.getCanvas().style.cursor = 'default';
 
@@ -220,6 +221,18 @@
                 }
                 initLayers();
             })
+
+            map.on('mousemove', function(e) {
+            var countries = map.queryRenderedFeatures(e.point, {
+                layers: ['countries']
+            });
+
+            if (countries.length > 0) {
+                document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> people per square mile</em></p>';
+            } else {
+                document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
+            }
+        });
 
             const initLayers = () => {
 

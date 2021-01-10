@@ -5,6 +5,8 @@ var fs = require('fs');
 const port = 8000;
 
 // viewed at http://localhost:8000
+
+app.use(express.static('../'));
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/../index.html'));
 });
