@@ -1,27 +1,105 @@
 const request = require('request');
 const cheerio = require('cheerio');
+const fs = require ('fs');
 
-// returns [{country: canada, score: 1}, {country: whatever, score: 0.5}]
+let globalResults = [];
+let maxScore;
+let minScore;
 
-const fakeResults = [{"country": "canada","score": 0.9},{"country": "united states","score": 0.4},{"country": "mexico","score": -0.1},{"country": "panama","score": -0.4}]
+// main(modifyGeoJson);
 
-function main(){
+function main(callback){
+  let out = new Array()
   request('https://en.wikipedia.org/wiki/Gay-friendly', (err, res, html) => {
-    if (err || res.statusCode != 200) return;
-    // return getCountryData(html);
-    return fakeResults;
+    if (err || res.statusCode != 200) return [err];
+    // out = {data: getCountryData(html)};
+    // out = [...getCountryData(html)];
+    out = getCountryData(html);
+    // console.log(out[0])
+    // console.log(globalResults[4])
+    if (callback) callback(out);
+    return out;
   });
 }
 
-// In progress
-function getCountryData(html) {
-  const $ = cheerio.load()
-  return 1;
+function modifyGeoJson(){
+  fs.readFile('../data/countries_compressed_arrayonly.geojson', 'utf8', (err, jsonString) => {
+    if (err) {return []}
+    let orig = JSON.parse(jsonString);
+    // orig.forEach((o) => {console.log(o.properties.name)})
+    orig.forEach((init)=>{
+      init.properties.score = 0;
+    })
+
+    globalResults.forEach((r) => {
+      // console.log('r = ', r.name)
+      let destination = orig.find(o => o.properties.name === r.name)
+
+      if (destination) {
+        // console.log(destination.properties.name)
+        // console.log("orig: ", destination.properties.score)
+        destination.properties.score = r.score;
+        // console.log("update", r.score)
+        console.log("modded; ", destination.properties.score)
+      }
+      // console.log(destination.properties.name)
+      // console.log(destination.properties.score)
+    })
+    fs.writeFile('../data/countries_compressed_arrayonly.geojson', JSON.stringify(orig), err => {
+      if (err) {console.log('Error writing file', err)} 
+      else {console.log('Successfully wrote file')}
+    })
+
+  })
+  
 }
 
-// function getStateData(html) {}
+function getCountryData(html) {
+  const $ = cheerio.load(html);
+  // const countryTable = $('table.wikitable:nth-child(13) > tbody').text();
 
-// Function call left in for testing purposes
-main();
+  
+  let results = []
+  $('table.wikitable:nth-child(13) > tbody > tr').each((idx, elem)=>{
+    let country = removeDumbStuff($(elem).find('td:nth-child(2)').text());
+    let score = Number($(elem).find('td:nth-child(3)').text()); //score
+    if (!minScore || score < minScore) {minScore = score;}
+    if (!maxScore || score > maxScore) {maxScore = score;}
+    // console.log(country);
+    // console.log(score);
+    if(country && score) {
+      globalResults.push({
+        "name": country,
+        "score": score
+      });
+    }
+  });
+  globalResults.forEach(r=>{
+    // console.log(r.name, " old: ", r.score)
+    r.score = scaleScore(minScore, maxScore, r.score)
+    // console.log("new ", r.score)
+  });
+  return globalResults;
+}
+
+// Country
+// Country [note ##] -> Country
+// FakeName (Country) -> Country
+function removeDumbStuff(str){
+  let result = str;
+  if(result.indexOf("[") != -1){
+    result = result.substring(0, result.indexOf("["));
+  }
+  if(result.indexOf("(") != -1){
+    result = result.substring(result.indexOf("(") + 1, result.indexOf(")"));
+  }
+  return result.trim();
+}
+
+// return scaled number (between -1 and 1) based on diff between min and max numbers in the data
+function scaleScore(min, max, toScale) {
+  let diff = max - min;
+  return (2*(toScale - min) / (max - min))-1;
+}
 
 module.exports = main;

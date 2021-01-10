@@ -14,10 +14,11 @@
   <script src="https://d3js.org/d3.v6.min.js"></script>
 
   <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js'></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css' rel='stylesheet' />
 
-    <link rel="stylesheet" href="styles.css">
-
+    <link rel="stylesheet" href="./styles.css">
+`
     <style>
         body {
         margin: 0;
@@ -63,7 +64,7 @@
         bottom: 0;
         right: 0;
         background: rgba(255, 255, 255, 0.8);
-        margin-right: 20px;
+        margin-right: 10px;
         font-family: Arial, sans-serif;
         overflow: auto;
         border-radius: 3px;
@@ -174,6 +175,7 @@
             }
         });
 
+
         map.getCanvas().style.cursor = 'default';
 
 
@@ -236,7 +238,10 @@
                 initLayers();
             })
 
-            const initLayers = () => {
+            map.on('mousemove', function(e) {
+            var countries = map.queryRenderedFeatures(e.point, {
+                layers: ['countries']
+            });
 
                 const scale = d3.scaleLinear()
                 .domain([0,100])
@@ -284,7 +289,7 @@
                 } else {
                 map.on('sourcedata', setAfterLoad);
                 }
-            }
+            });
             });
 
         
