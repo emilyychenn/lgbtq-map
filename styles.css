@@ -26,6 +26,12 @@ a {
   text-decoration: none;
 }
 
+span {
+  font-family: "Scope One", serif;
+  font-size: 0.85em;
+  font-weight: 700;
+}
+
 /**
 * Create a position for the map
 * on the page */
