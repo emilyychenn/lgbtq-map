@@ -1,0 +1,16 @@
+[
+    {
+        "name": "Canada",
+        "score": 1.0
+    },
+
+    {
+        "name": "United States",
+        "score": 0.5
+    },
+
+    {
+        "name": "Mexico",
+        "score": 0.8
+    }
+]
