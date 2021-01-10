@@ -6,8 +6,6 @@ let globalResults = [];
 let maxScore;
 let minScore;
 
-// main(modifyGeoJson);
-
 function main(callback){
   let out = new Array()
   request('https://en.wikipedia.org/wiki/Gay-friendly', (err, res, html) => {
@@ -17,8 +15,7 @@ function main(callback){
     out = getCountryData(html);
     // console.log(out[0])
     // console.log(globalResults[4])
-    if (callback) callback(out);
-    return out;
+    if (callback) return callback(out);
   });
 }
 
@@ -40,7 +37,7 @@ function modifyGeoJson(){
         // console.log("orig: ", destination.properties.score)
         destination.properties.score = r.score;
         // console.log("update", r.score)
-        console.log("modded; ", destination.properties.score)
+        // console.log("modded; ", destination.properties.score)
       }
       // console.log(destination.properties.name)
       // console.log(destination.properties.score)
@@ -49,7 +46,7 @@ function modifyGeoJson(){
       if (err) {console.log('Error writing file', err)} 
       else {console.log('Successfully wrote file')}
     })
-
+    return orig;
   })
   
 }
@@ -102,4 +99,6 @@ function scaleScore(min, max, toScale) {
   return (2*(toScale - min) / (max - min))-1;
 }
 
-module.exports = main;
+const out = ()=>{return main(modifyGeoJson)};
+
+module.exports = out;

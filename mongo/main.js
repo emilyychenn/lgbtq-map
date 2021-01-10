@@ -11,7 +11,6 @@ async function createListing(client, newListing){
     console.log(`New listing created with the following id: ${result.insertedId}`);
 }
 
-
 async function createMultipleListings(client, newListings){
     const result = await client.db("sample_airbnb").collection("listingsAndReviews").insertMany(newListings);
     console.log(`${result.insertedCount} new listing(s) created with the following id(s):`);
@@ -103,6 +102,35 @@ async function createCountry(client, newCountry){
     const result = await client.db("JSON_Objects").collection("JSON_Countries").insertOne(newCountry);
 }
 
+const fs = require ('fs');
+// const updateFn = require('../scraper/scraper');
+async function createBigGeo(client, fileString){
+    try {
+        fs.readFile(fileString, 'utf8', async (err, jsonString) => {
+            if (err) {return}
+            let bigBoy = JSON.parse(jsonString);
+            const result = await client.db("JSON_Objects").collection("big_boy").insertOne(bigBoy);
+            console.log(`New listing created with the following id: ${result.insertedId}`);
+            // bigBoy.features.forEach((country)=>{console.log(country.properties.score)}) //testing for correct data
+        })
+        // console.log(updateFn()); Race contition or object passing errors
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function getBigGeo(client) {
+    result = await client.db("JSON_Objects").collection("big_boy")
+                        .findOne({ type: "FeatureCollection" }); 
+    if (result) {
+        console.log(`Found it!':`);
+        console.log(`${result.features[0].properties.name} is first country`);
+        return result;
+    } else {
+        console.log(`Not found'`);
+        return {type: "not found lol"};
+    }
+}
 
 /**
  * 
@@ -218,4 +246,5 @@ var NameArray = [
 ]
 
 
-module.exports = {createCountry,updateCountryScorebyName,findCountryScorebyName,deleteCountryByName,getCollection,findCountryByName, makeLargeArray};
+// module.exports = {createCountry,updateCountryScorebyName,findCountryScorebyName,deleteCountryByName,findCountryByName, makeLargeArray};
+module.exports = {createCountry,createBigGeo,getBigGeo,updateCountryScorebyName,findCountryScorebyName,deleteCountryByName};

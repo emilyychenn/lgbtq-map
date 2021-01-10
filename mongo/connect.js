@@ -11,42 +11,42 @@ var collection;
 // Replace the following with your Atlas connection string                                                                                                                                        
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri, { useUnifiedTopology: true });
-async function run() {
+
+async function runServer() {
     try {
         await client.connect();
         console.log("Connected correctly to server");
-        await mainFcns();
+        await testingDumpingGround();
     } catch (err) {
         console.log(err.stack);
-    }/*
-    finally {
-       await client.close();
-       console.log("Disconnected");
-    }*/
+    }
+    // finally {
+    //    await client.close();
+    //    console.log("Disconnected");
+    // }
 }
-run().catch(console.dir);
+runServer().catch(console.dir);
 
-var testCountry = {
-    country: 'Canada',
-    score: 0.8823529411764706 
-}
-
-async function mainFcns (){
+async function testingDumpingGround (){
   //  await extMain.deleteCountryByName(client,'Canada');
     //var test = await extMain.findOneListingByName(client,"Ribeira Charming Duplex");
   //  console.log(`${test} is number of bedrooms in the main part BEECH`);
-/** 
-        for ( i = 0; i < BigArray.length; i++){
-        var tempCountry = BigArray[i];
-          await extMain.createCountry(client,tempCountry);
-       }*/
 
-     //  const collection = client.db("JSON_Objects").collections("nwHacks");
-     //  console.log(`${collection} document(s) was/were deleted.`);
+        // for ( i = 0; i < BigArray.length; i++){
+        // var tempCountry = BigArray[i];
+        //   await extMain.createCountry(client,tempCountry);
+        // }
+
+        //em was here
+        // extMain.createBigGeo(client, '../data/em-server-feed.geojson')
+        // extMain.getBigGeo(client)
+
 
   //  await extMain.updateListingByName(client, "Infinite Views", { score: 0.1});
-
+  return;
 }
+
+module.exports = runServer;
 
 var BigArray = [
     { country: '', score: 0.17647058823529416 },
