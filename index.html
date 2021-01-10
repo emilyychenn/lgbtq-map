@@ -81,7 +81,7 @@
 
         #features {
         top: 130px;
-        height: 100px;
+        height: 130px;
         margin-top: 5px;
         width: 250px;
         }
@@ -119,7 +119,10 @@
     <div id='map'></div>
 
     <div class='map-overlay' id='header'>
-        <h2 style='word-spacing: 50px; text-align: right; padding-right: 40px; padding-top: 15px;'>map rankings</h2>
+        <h2 style='word-spacing: 50px; text-align: right; padding-right: 60px; padding-top: 15px;'>
+            <a href=index.html style='color: white;'>map</a> 
+            <a href=rankings.html style='color: white'>rankings</a> 
+            <a href=pages/about.html style='color: white;'>about</a></h2>
     </div>
 
     <div class='map-overlay' id='features'><h3>LGBTQ Friendly Countries</h3><div id='pd'><p>Hover over a country!</p></div></div>
@@ -145,40 +148,6 @@
         // initialize the map canvas to interact with later
         var canvas = map.getCanvasContainer();
 
-        // TODO: ADD BACK LATER!!
-        // map.on('load', function() {
-        // // the rest of the code will go in here
-        //     var layers = ['0-10', '10-20', '20-50', '50-100', '100-200', '200-500', '500-1000', '1000+'];
-        //     var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
-        
-        //     for (i = 0; i < layers.length; i++) {
-        //         var layer = layers[i];
-        //         var color = colors[i];
-        //         var item = document.createElement('div');
-        //         var key = document.createElement('span');
-        //         key.className = 'legend-key';
-        //         key.style.backgroundColor = color;
-
-        //         var value = document.createElement('span');
-        //         value.innerHTML = layer;
-        //         item.appendChild(key);
-        //         item.appendChild(value);
-        //         legend.appendChild(item);
-        //     }
-        // });
-
-        // map.on('mousemove', function(e) {
-        //     var countries = map.queryRenderedFeatures(e.point, {
-        //         layers: ['countries']
-        //     });
-
-        //     if (countries.length > 0) {
-        //         document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> people per square mile</em></p>';
-        //     } else {
-        //         document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
-        //     }
-        // });
-
         map.on('mousemove', function(e) {
             var countries = map.queryRenderedFeatures(e.point, {
                 layers: ['countries']
@@ -186,11 +155,25 @@
 
             if (countries.length > 0) {
                 document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>';
+                if (countries[0].properties.score < -0.7) {
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>VERY unsafe! Do not visit.</p>';
+                } else if (countries[0].properties.score < -0.4) {
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Not safe! Try and avoid</p>';
+                } else if (countries[0].properties.score < -0.1) {
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Not recommended! Proceed with caution.</p>';
+                } else if (countries[0].properties.score < 0.2) {
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Mostly neutral. Take care!</p>';
+                } else if (countries[0].properties.score < 0.5) {
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Not bad, safe travels!.</p>';
+                } else if (countries[0].properties.score < 0.8) {
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Safe to visit.</p>';
+                } else {
+                    document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> LGBTQ friendliness score</em></p>' + '<p>Good option, have a great trip!</p>';
+                }
             } else {
                 document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
             }
         });
-
 
         map.getCanvas().style.cursor = 'default';
 
@@ -214,8 +197,8 @@
         };
 
         map.on('load', function() {
-            var layers = ['0-10', '10-20', '20-50', '50-100', '100-200', '200-500', '500-1000', '1000+'];
-            var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
+            var layers = ['-1.0 to -0.7', '-0.7 to -0.4', '-0.4 to -0.1', '-0.1 to 0.2', '0.2 to 0.5', '0.5 to 0.8', '0.8 to 1.0'];
+            var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026'];
         
             for (i = 0; i < layers.length; i++) {
                 var layer = layers[i];
@@ -253,18 +236,6 @@
                 }
                 initLayers();
             })
-
-            map.on('mousemove', function(e) {
-            var countries = map.queryRenderedFeatures(e.point, {
-                layers: ['countries']
-            });
-
-            if (countries.length > 0) {
-                document.getElementById('pd').innerHTML = '<h3><strong>' + countries[0].properties.name + '</strong></h3><p><strong><em>' + countries[0].properties.score + '</strong> people per square mile</em></p>';
-            } else {
-                document.getElementById('pd').innerHTML = '<p>Hover over a country!</p>';
-            }
-        });
 
             const initLayers = () => {
 
