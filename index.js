@@ -12,6 +12,6 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT || 5000, () => {
     console.log(`test server listening at http://localhost:${port}`)
 })
