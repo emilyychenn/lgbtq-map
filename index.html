@@ -79,6 +79,13 @@
         margin-right: 0;
         }
 
+        .header img {
+            float: left;
+            /* height: 20px; */
+            /* size: 10px; */
+            /* width: 10px; */
+        }
+
         #features {
         top: 130px;
         height: 150px;
@@ -119,11 +126,27 @@
     <div id='map'></div>
 
     <div class='map-overlay' id='header'>
+        
         <h2 style='word-spacing: 50px; text-align: right; padding-right: 60px; padding-top: 15px;'>
+            <!-- <a href=index.html><img src='images/logowhite.png' style='width: 130px;' alt="logo"></a> -->
+            <div class="logo" style="position: absolute; padding-left: 20px;"><a href="index.html"><img src='images/logowhite.png' style='width: 140px; position: absolute;' alt="logo"></a></div>
             <a href=index.html style='color: white;'>map</a> 
             <a href=rankings.html style='color: white'>rankings</a> 
             <a href=pages/about.html style='color: white;'>about</a></h2>
     </div>
+
+
+    <!-- <header id="header" class="alt" style="background-color: blue;">
+        <div class="logo"><a href="index.html"><img src='images/logowhite.png' style='width: 140px;' alt="logo"></a></div>
+        <div class="logo"><a href="../index.html">LGBTQ+ Map <span>by the Code Monkeys</span></a></div>
+        <h4 style='word-spacing: 50px; text-align: right; padding-right: 60px;'>
+            <a href=index.html style='color: white;'>map</a> 
+            <a href=pages/rankings.html style='color: white'>rankings</a> 
+            <a href=pages/about.html style='color: white;'>about</a></h4>
+        <a href="#menu">Menu</a>
+    </header> -->
+
+
 
     <div class='map-overlay' id='features'><h3>LGBTQ Friendly Countries</h3><div id='pd'><p>Hover over a country!</p></div></div>
     <div class='map-overlay' id='legend'></div>
