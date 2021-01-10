@@ -4,6 +4,8 @@
     "description": "frontend",
     "main": "index.js",
     "author": "emily chen",
-    "license": "MIT"
-  }
-  
+    "license": "MIT",
+    "dependencies": {
+        "express": "^4.17.1"
+    }
+}
