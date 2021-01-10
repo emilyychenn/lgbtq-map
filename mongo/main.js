@@ -18,6 +18,7 @@ async function createCountry(client, newCountry){
 async function createMultipleListings(client, newListings){
     const result = await client.db("sample_airbnb").collection("listingsAndReviews").insertMany(newListings);
     console.log(`${result.insertedCount} new listing(s) created with the following id(s):`);
+    console.log();
     console.log(result.insertedIds);
 }
 
@@ -25,9 +26,11 @@ async function findOneListingByName(client, nameOfListing) {
     result = await client.db("sample_airbnb").collection("listingsAndReviews")
                         .findOne({ name: nameOfListing });
 
+   // const result = await cursor.toArray();
+
     if (result) {
         console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
-        console.log(result);
+        console.log(`${result.bedrooms} is number of bedrooms`);
     } else {
         console.log(`No listings found with the name '${nameOfListing}'`);
     }
@@ -85,5 +88,16 @@ async function createCountry(client, newCountry){
     const result = await client.db("JSON_Objects").collection("nwHack").insertOne(newCountry);
 }
 
+async function findScorebyName(client, nameOfCountry) {
+    result = await client.db("JSON_Object").collection("nwHack")
+                        .findOne({ name: nameOfCountry });
 
-module.exports = {listDatabases,createListing,createMultipleListings,findOneListingByName,findMinListings,updateListingByName,createCountry,updateCountryScorebyName};
+    if (result) {
+     //   console.log(`Found a listing in the collection with the name '${nameOfListing}':`);
+        console.log(`${result.score} is the score.`);
+    } else {
+        console.log(`No listings found with the name '${nameOfListing}'`);
+    }
+}
+
+module.exports = {listDatabases,createListing,createMultipleListings,findOneListingByName,findMinListings,updateListingByName,createCountry,updateCountryScorebyName,findScorebyName};
