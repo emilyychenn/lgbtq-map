@@ -103,6 +103,7 @@ async function createCountry(client, newCountry){
     const result = await client.db("JSON_Objects").collection("JSON_Countries").insertOne(newCountry);
 }
 
+
 /**
  * 
  * Finds the score of the given country, 
