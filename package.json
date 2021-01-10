@@ -1,0 +1,9 @@
+{
+    "name": "lgbtq-map-frontend",
+    "version": "1.0",
+    "description": "frontend",
+    "main": "index.js",
+    "author": "emily chen",
+    "license": "MIT"
+  }
+  
