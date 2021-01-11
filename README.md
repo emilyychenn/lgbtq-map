@@ -1,5 +1,5 @@
 # SafeTravels: an LGBTQ+ friendly travel map 🏳️‍🌈
-Map indicating countries' levels of acceptance towards members of the LGBTQ+ community. Try it out [here](still-forest-78209.herokuapp.com)!
+Map indicating countries' levels of acceptance towards members of the LGBTQ+ community. Try it out [here](https://still-forest-78209.herokuapp.com)!
 <br><br>
 
 ### Inspiration
